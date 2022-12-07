@@ -1,0 +1,24 @@
+.login{
+    margin: 6rem  auto;
+    text-align: center;
+}
+
+.login input{
+    padding:0.2rem;
+}
+
+.login__button{
+    margin: 2.5rem auto;
+    width:50%;
+    text-align: center;
+    border: none;
+    background-color:#3f87a6;
+    border-radius: 2rem;
+    padding: 0.5rem;
+    font-weight: 500;
+}
+
+.login__button:hover{
+    transform: scale(1.1);
+    box-shadow: 0.2rem 0.2rem 0.2rem 0.2rem rgb(116, 112, 112);
+}

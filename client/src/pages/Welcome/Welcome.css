@@ -1,0 +1,16 @@
+.welcome__title{
+    font-family: 'Pacifico', cursive;
+    font-weight: 700;
+    margin: auto;
+    width:100%;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-style: italic;
+    color: transparent;
+    -webkit-text-stroke-color: black;
+    -webkit-text-stroke-width: 0.2rem;
+    text-align: center;
+}
+
+
+
