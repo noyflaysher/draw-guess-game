@@ -34,12 +34,12 @@ io.on("connection", (socket) => {
   socket.on("userLogIn", (userName) => {
     players.push(userName);
     if (players.length === 1) {
-      // socket.emit("setWaiting");
+      socket.emit("setDrawing");
       console.log("1 player");
     }
     if (players.length === 2) {
       console.log("2 player");
-      // io.emit("setDrawing");
+      io.emit("startGame");
     }
     if (players.length > 2) {
       return;
