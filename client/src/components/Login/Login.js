@@ -16,8 +16,8 @@ function Login() {
             const players=JSON.parse(localStorage.getItem("players"))||[];
             players.push({name});
             SocketService.init();
-            localStorage.setItem("players",JSON.stringify(players));
             SocketService.emit("userLogIn",name);
+            localStorage.setItem("players",JSON.stringify(players));
             console.log("navigate");
             navigate("/game");
         }else{

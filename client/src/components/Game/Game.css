@@ -1,0 +1,31 @@
+.gameScreen{
+    /* padding: 0.2rem; */
+}
+.gameScreen__header{
+    display: flex;
+    justify-content:space-between;
+    font-size: 2.5rem;
+    align-items: center;
+    margin-bottom: 4rem;
+}
+
+.gameScreen__header-scores{
+    font-weight: 500;
+}
+
+.gameScreen__header-btn{
+    font-size: 2rem;
+    padding: 0.5rem;
+    border:0.45rem solid #3f87a6;
+    border-radius: 2rem;
+    background-color: transparent;
+    font-family: inherit;
+}
+
+.gameScreen__header-btn:hover{
+    /* background-color:  #3f87a6; */
+    cursor: pointer;
+    transform: scaleX(1.1);
+    font-weight: 600;
+    box-shadow:0.5rem 0.5rem 0.5rem 0.3rem rgb(163, 158, 158) ;
+}

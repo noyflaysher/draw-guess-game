@@ -2,6 +2,7 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import Welcome from './pages/Welcome/Welcome';
+import Game from './components/Game/Game';
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
           />
           <Route
             path="/game"
-            element=""
+            element={<Game/>}
           />
           <Route
             path="/wait"

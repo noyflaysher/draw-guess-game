@@ -9,7 +9,8 @@ export const SocketService={
 };
 
 function init(){
-    socket=io("/");
+    console.log("init");
+    socket=io("http://localhost:3002");
 }
 
 function terminate(){
@@ -21,6 +22,7 @@ function on(event,func){
 }
 
 function emit(event,func){
+    console.log("emit");
     socket.emit(event,func);
 }
 

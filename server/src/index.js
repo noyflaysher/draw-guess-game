@@ -34,7 +34,7 @@ io.on("connection", (socket) => {
   socket.on("userLogIn", (userName) => {
     players.push(userName);
     if (players.length === 1) {
-      socket.emit("setDrawing");
+      socket.emit("waitForPlayer");
       console.log("1 player");
     }
     if (players.length === 2) {
@@ -45,32 +45,32 @@ io.on("connection", (socket) => {
       return;
     }
 
-    // socket.on("sentDrawing", (drawingVideo) => {
-    //   socket.broadcast.emit("getDrawing", drawingVideo);
-    // });
+    socket.on("sentDrawing", (drawingVideo) => {
+      socket.broadcast.emit("getDrawing", drawingVideo);
+    });
 
-    // socket.on("sentWordChoosing", ({ word, points }) => {
-    //   socket.broadcast.emit("getWordChoosing", { word, points });
-    // });
+    socket.on("sentWordChoosing", ({ word, points }) => {
+      socket.broadcast.emit("getWordChoosing", { word, points });
+    });
 
-    // socket.on("success", (points) => {
-    //   score[Number(bool)] = points;
-    //   bool = !bool;
-    //   socket.broadcast.emit("changeWaitForDraw");
-    // });
+    socket.on("success", (points) => {
+      score[Number(bool)] = points;
+      bool = !bool;
+      socket.broadcast.emit("changeWaitForDraw");
+    });
 
-    // socket.on("disconnect", () => {
-    //   players = [];
-    // });
+    socket.on("disconnect", () => {
+      players = [];
+    });
 
-    // socket.on("endGame", () => {
-    //   var win = "";
-    //   if (score[0] == score[1]) win = "both";
-    //   if (score[0] > score[1]) win = "player 1";
-    //   if (score[0] < score[1]) win = "player 2";
-    //   io.emit("winner", win);
-    //   sockets.forEach((s) => s.disconnect());
-    // });
+    socket.on("endGame", () => {
+      var win = "";
+      if (score[0] == score[1]) win = "both";
+      if (score[0] > score[1]) win = "player 1";
+      if (score[0] < score[1]) win = "player 2";
+      io.emit("winner", win);
+      sockets.forEach((s) => s.disconnect());
+    });
   });
 });
 

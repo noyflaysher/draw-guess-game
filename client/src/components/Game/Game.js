@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
-import DrawingView from "../../components/DrawingView/DrawingView";
-import GuessingView from "../../components/GuessingView/GuessingView";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import DrawingView from "../../pages/DrawingView/DrawingView";
+import GuessingView from "../../pages/GuessingView/GuessingView";
+import WaitingView from "../../pages//WaitingView/WaitingView";
 import { SocketService } from '../../socket/SocketService';
 import "./Game.css";
+import Button from '@mui/material/Button';
+{/* <Button variant="text">Text</Button> */}
 
 
 function Game() {
-
+  const navigate = useNavigate();
   const [scores, setScores] = useState(0);
   const [newScores, setNewScoress] = useState();
-  const [waitForPlayer, setWaitForPlayer] = useState(true);
+  // const [waitForPlayer, setWaitForPlayer] = useState(true);
   const [choosenWord, setChoosenWord] = useState(null);
   const [draw, setDraw] = useState(false);
   const [waitForDraw, setWaitForDraw] = useState(true);
@@ -19,13 +23,15 @@ function Game() {
   const [isguessTrue, setIsguessTrue] = useState(false);
 
   useEffect(() => {
-    SocketService.on("setDrawing", () => {
+    SocketService.on("waitForPlayer", () => {
+      console.log("waiting");
       setWaitForDraw(false);
       setWaitForGuess(false);
       setDraw(true);
     });
 
     SocketService.on("startGame", () => {
+      console.log("start");
       setIsLoading(false);
     });
 
@@ -36,8 +42,8 @@ function Game() {
     });
 
     SocketService.on("getWords", ({ word, points }) => {
-      setWord(word);
-      setNewPoints(scores);
+      setChoosenWord(word);
+      setNewScoress(scores);
     });
 
     SocketService.on("getDrawing", (drawingVideo) => {
@@ -65,7 +71,7 @@ function Game() {
   };
 
   const guessTrue=(guessWord)=>{
-    if(guessWord.toLowerCase()===word){
+    if(guessWord.toLowerCase()===choosenWord){
         setIsguessTrue(true);
         setScores(scores+newScores);
     }else{
@@ -82,23 +88,25 @@ function Game() {
   };
 
   const chooseWord=(word,scores)=>{
-    SocketService.emit("sentWordChoosing",{ word, points });
+    SocketService.emit("sentWordChoosing",{ word, scores });
   };
 
   const endGame = () => {
+    console.log("finish the game");
     SocketService.emit("endGame");
   };
   
 
   return (
     <div className="gameScreen">
-        {isLoading && waitForPlayer && <WaitingView/>}
+        {isLoading && <WaitingView/>}
         {!isLoading && (
             <div className="gameScreen__header">
                 <div className="gameScreen__header-scores">
                     scores : {scores}
                 </div>
-                <button className="gameScreen__header-finish" onClick={endGame}>finish the game</button>
+                {/* <Button className='gameScreen__header-btn' size="large" variant="outlined">Outlined</Button> */}
+                <button className="gameScreen__header-btn" onClick={endGame}>finish the game</button>
             </div>
         )}
         {draw && !isLoading && (

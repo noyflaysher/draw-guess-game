@@ -1,8 +1,14 @@
-import React from 'react'
+import React from 'react';
+import Spinner from 'react-bootstrap/Spinner';
+import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
+import "./WaitingView.css"
 
 function WaitingView() {
   return (
-    <div>WaitingView</div>
+    <div className='waitingView'>
+      <h1 className="waitingView__title">Waiting for the other player..</h1>
+      <LoadingSpinner className="waitigView__spinner"/>
+    </div>
   )
 }
 
