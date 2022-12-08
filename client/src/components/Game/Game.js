@@ -4,17 +4,16 @@ import DrawingView from "../../pages/DrawingView/DrawingView";
 import GuessingView from "../../pages/GuessingView/GuessingView";
 import WaitingView from "../../pages//WaitingView/WaitingView";
 import { SocketService } from '../../socket/SocketService';
+import CloseIcon from '@mui/icons-material/Close';
 import "./Game.css";
-import Button from '@mui/material/Button';
-{/* <Button variant="text">Text</Button> */}
 
 
 function Game() {
   const navigate = useNavigate();
   const [scores, setScores] = useState(0);
-  const [newScores, setNewScoress] = useState();
+  const [newScores, setNewScores] = useState();
   // const [waitForPlayer, setWaitForPlayer] = useState(true);
-  const [choosenWord, setChoosenWord] = useState(null);
+  const [word, setWord] = useState(null);
   const [draw, setDraw] = useState(false);
   const [waitForDraw, setWaitForDraw] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
@@ -41,12 +40,14 @@ function Game() {
       setDraw(false);
     });
 
-    SocketService.on("getWords", ({ word, points }) => {
-      setChoosenWord(word);
-      setNewScoress(scores);
+    SocketService.on("getWordChoosing", ({ word, scores }) => {
+      console.log(`get word choosing`);
+      setWord(word);
+      setNewScores(scores);
     });
 
-    SocketService.on("getDrawing", (drawingVideo) => {
+    SocketService.on("getDrawing", (drawingImg) => {
+      console.log("get drawing");
       setDrawingImg(drawingImg);
       setDraw(false);
       setWaitForGuess(false);
@@ -55,6 +56,7 @@ function Game() {
     });
 
     SocketService.on("winner", (winner) => {
+      console.log("winner");
       setDraw(true);
       setWaitForDraw(false);
       setIsLoading(true);
@@ -67,13 +69,15 @@ function Game() {
 
   const sendDrawImg=(drawingImg)=>{
     setWaitForGuess(true);
+    console.log("drawing send");
     SocketService.emit("sentDrawing",drawingImg);
   };
 
   const guessTrue=(guessWord)=>{
-    if(guessWord.toLowerCase()===choosenWord){
+    if (guessWord.value == word) {
         setIsguessTrue(true);
         setScores(scores+newScores);
+        
     }else{
         alert("try again..")
     }
@@ -88,6 +92,7 @@ function Game() {
   };
 
   const chooseWord=(word,scores)=>{
+    console.log("send the word to server");
     SocketService.emit("sentWordChoosing",{ word, scores });
   };
 
@@ -99,42 +104,42 @@ function Game() {
 
   return (
     <div className="gameScreen">
-        {isLoading && <WaitingView/>}
+        {isLoading && <WaitingView title="waiting for the other player"/>}
         {!isLoading && (
             <div className="gameScreen__header">
                 <div className="gameScreen__header-scores">
                     scores : {scores}
                 </div>
-                {/* <Button className='gameScreen__header-btn' size="large" variant="outlined">Outlined</Button> */}
-                <button className="gameScreen__header-btn" onClick={endGame}>finish the game</button>
+                <button className="gameScreen__header-btn" onClick={endGame}>end game</button>
             </div>
         )}
         {draw && !isLoading && (
         <DrawingView
-          chooseWord={chooseWord}
-          onClick={sendDrawImg}
+          onchooseWord={chooseWord}
+          onSend={sendDrawImg}
           waiting={waitForGuess}
         />
       )}
       {!draw && !isLoading && (
         <GuessingView
-            wait={waitForDraw}
+          waiting={waitForDraw}
           drawingImg={drawingImg}
           success={guessTrue}
         />
       )}
       {isguessTrue && (
         <div className="succes__popup">
-          <h3>Your guess is true!</h3>
-          <h4>you earn {newScores} points</h4>
           <button
             className="success__popup-close"
-            onClick={() => {
-                changePlayer();
+            onClick={()=>{
+              changePlayer();
             }}
           >
-            X
+           <CloseIcon/>
           </button>
+          <h3>Your guess is true 🎉</h3>
+          <h4>you earn {newScores} points</h4>
+          
         </div>
       )}
         

@@ -20,8 +20,8 @@ const corsOptions = {
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE"],
 };
-app.use(cors(corsOptions));
-app.use(express.static("public"));
+// app.use(cors(corsOptions));
+// app.use(express.static("public"));
 
 let scores=[0,0];
 let players=[];
@@ -45,16 +45,16 @@ io.on("connection", (socket) => {
       return;
     }
 
-    socket.on("sentDrawing", (drawingVideo) => {
-      socket.broadcast.emit("getDrawing", drawingVideo);
+    socket.on("sentDrawing", (drawingImg) => {
+      socket.broadcast.emit("getDrawing", drawingImg);
     });
 
-    socket.on("sentWordChoosing", ({ word, points }) => {
-      socket.broadcast.emit("getWordChoosing", { word, points });
+    socket.on("sentWordChoosing", ({ word, scores }) => {
+      socket.broadcast.emit("getWordChoosing", { word, scores });
     });
 
     socket.on("success", (points) => {
-      score[Number(bool)] = points;
+      scores[Number(bool)] = points;
       bool = !bool;
       socket.broadcast.emit("changeWaitForDraw");
     });
@@ -65,9 +65,9 @@ io.on("connection", (socket) => {
 
     socket.on("endGame", () => {
       var win = "";
-      if (score[0] == score[1]) win = "both";
-      if (score[0] > score[1]) win = "player 1";
-      if (score[0] < score[1]) win = "player 2";
+      if (scores[0] == scores[1]) win = "both";
+      if (scores[0] > scores[1]) win = "player 1";
+      if (scores[0] < scores[1]) win = "player 2";
       io.emit("winner", win);
       sockets.forEach((s) => s.disconnect());
     });
