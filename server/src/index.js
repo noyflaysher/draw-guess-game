@@ -27,6 +27,8 @@ let scores=[0,0];
 let players=[];
 let sockets=[];
 let bool=true;
+let socket1;
+let socket2;
 
 io.on("connection", (socket) => {
   sockets.push(socket);
@@ -35,10 +37,12 @@ io.on("connection", (socket) => {
     players.push(userName);
     if (players.length === 1) {
       socket.emit("waitForPlayer");
-      console.log("1 player");
+      // console.log(`player 1, socket id : ${socket.id}`);
+      socket1=socket.id;
     }
     if (players.length === 2) {
-      console.log("2 player");
+      // console.log(`player 2, socket id : ${socket.id}`);
+      socket2=socket.id
       io.emit("startGame");
     }
     if (players.length > 2) {
@@ -65,10 +69,24 @@ io.on("connection", (socket) => {
 
     socket.on("endGame", () => {
       var win = "";
-      if (scores[0] == scores[1]) win = "both";
-      if (scores[0] > scores[1]) win = "player 1";
-      if (scores[0] < scores[1]) win = "player 2";
-      io.emit("winner", win);
+      if (scores[0] == scores[1]){
+        win = "both";
+        io.emit("winner", win);
+        
+      } 
+      else if (scores[0] > scores[1]){
+        win = "player 1";
+        los="player2";
+        io.to(socket1).emit("winner", win);
+        io.to(socket2).emit("loss", los);
+        
+      } 
+      else if (scores[0] < scores[1]) {
+        win = "player 2";
+        los="player1";
+        io.to(socket2).emit("winner", win);
+        io.to(socket1).emit("loss", los);
+      }
       sockets.forEach((s) => s.disconnect());
     });
   });

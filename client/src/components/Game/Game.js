@@ -56,11 +56,25 @@ function Game() {
     });
 
     SocketService.on("winner", (winner) => {
-      console.log("winner");
       setDraw(true);
       setWaitForDraw(false);
       setIsLoading(true);
-      alert(`${winner} is the winner 🏆 `);
+      if(winner=="both"){
+        alert(`both are the winner 🏆 `);
+      }
+      else{
+        alert(`you are the winner 🏆 `);
+      }      
+      localStorage.removeItem("players");
+      SocketService.terminate()
+      navigate("/");
+    });
+
+    SocketService.on("loss", (loser) => {
+      setDraw(true);
+      setWaitForDraw(false);
+      setIsLoading(true);
+      alert(`you lost 😕 `);
       localStorage.removeItem("players");
       SocketService.terminate()
       navigate("/");
