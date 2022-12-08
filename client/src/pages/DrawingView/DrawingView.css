@@ -48,14 +48,6 @@
 
 }
 
-/* .drawingView__canvas-erase{
-    margin-right: 2rem;
-}
-
-.drawingView__canvas-undo{
-    margin-left: 2rem;
-} */
-
 .drwingView__canvas{
     margin: auto;
     align-items: center;
@@ -63,4 +55,66 @@
 
 .drawingView__canvas-send{
     align-content: center;
+}
+
+.drawingView__canvas-brush-color{
+    border-radius: 50%;
+    width:2.5rem;
+    height:2.5rem;
+    cursor: pointer;
+}
+
+.pink{
+    background-color: #FF1493;
+
+}
+
+.pink:hover{
+    box-shadow: 0.2rem 0.2rem 0.2rem 0.2rem #FF1493;
+}
+
+.purple{
+    background-color: #BA55D3;
+}
+
+.purple:hover{
+    box-shadow: 0.2rem 0.2rem 0.2rem 0.2rem #BA55D3;
+}
+
+.green{
+    background-color: #3CB371;
+}
+
+.green:hover{
+    box-shadow: 0.2rem 0.2rem 0.2rem 0.2rem #3CB371;
+}
+
+.blue{
+    background-color: #4169E1;
+}
+
+.blue:hover{
+    box-shadow: 0.2rem 0.2rem 0.2rem 0.2rem #4169E1;
+}
+
+.yellow{
+    background-color: #FFD700;
+}
+
+.yellow:hover{
+    box-shadow: 0.2rem 0.2rem 0.2rem 0.2rem #FFD700;
+}
+
+.black{
+    background-color: black;
+}
+
+.black:hover{
+    box-shadow: 0.2rem 0.2rem 0.2rem 0.2rem black;
+}
+
+.drawingView__canvas-brush-colors{
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 2rem;
 }

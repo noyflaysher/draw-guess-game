@@ -8,6 +8,7 @@
     margin-right: 2rem;
     font-family: inherit;
     padding: 0.5rem;
+    
 }
 
 .guessingView__btn{
@@ -18,6 +19,7 @@
     cursor: pointer;
     margin-bottom: 2.5rem;
     font-family: inherit;
+    margin-top: 2rem;
 }
 
 .guessingView__btn:hover{
