@@ -1,0 +1,155 @@
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import DrawingView from "../../pages/DrawingView/DrawingView";
+import GuessingView from "../../pages/GuessingView/GuessingView";
+import WaitingView from "../../pages//WaitingView/WaitingView";
+import { SocketService } from '../../socket/SocketService';
+import CloseIcon from '@mui/icons-material/Close';
+import "./Game.css";
+
+
+function Game() {
+  const navigate = useNavigate();
+  const [scores, setScores] = useState(0);
+  const [newScores, setNewScores] = useState(0);
+  const [word, setWord] = useState(null);
+  const [draw, setDraw] = useState(false);
+  const [waitForDraw, setWaitForDraw] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [waitForGuess, setWaitForGuess] = useState(false);
+  const [drawingImg, setDrawingImg] = useState(null);
+  const [isguessTrue, setIsguessTrue] = useState(false);
+
+  useEffect(() => {
+    SocketService.on("waitForPlayer", () => {
+      setWaitForDraw(false);
+      setWaitForGuess(false);
+      setDraw(true);
+    });
+
+    SocketService.on("startGame", () => {
+      setIsLoading(false);
+    });
+
+    SocketService.on("changeWaitForDraw", () => {
+      setWaitForDraw(true);
+      setWaitForGuess(false);
+      setDraw(false);
+    });
+
+    SocketService.on("getChoosingWord", ({ word, scores }) => {
+      setWord(word);
+      setNewScores(scores);
+    });
+
+    SocketService.on("getDraw", (drawingImg) => {
+      setDraw(false);
+      setDrawingImg(drawingImg);
+      setWaitForGuess(false);
+      setIsLoading(false);
+      setWaitForDraw(false);
+    });
+
+    SocketService.on("winner", (winner) => {
+      setDraw(true);
+      setWaitForDraw(false);
+      setIsLoading(true);
+      if(winner=="both"){
+        alert(`both are the winner 🏆 `);
+      }
+      else{
+        alert(`${winner} is the winner 🏆 `);
+      }      
+      // localStorage.removeItem("players");
+      SocketService.terminate()
+      navigate("/");
+    });
+
+    SocketService.on("loss", () => {
+      setDraw(true);
+      setWaitForDraw(false);
+      setIsLoading(true);
+      alert(`you lost 😕 `);
+      // localStorage.removeItem("players");
+      SocketService.terminate()
+      navigate("/");
+    });
+  }, []);
+
+  const chooseWord=(word,scores)=>{
+    SocketService.emit("sendChoosingWord",{ word, scores });
+  };
+
+  const sendDrawImg=(drawingImg)=>{
+    setWaitForGuess(true);
+    SocketService.emit("sendDraw",drawingImg);
+  };
+
+  const guessTrue=(guessWord)=>{
+    if (guessWord.value == word) {
+        setIsguessTrue(true);
+        setScores(scores+newScores);
+        
+    }else{
+        alert("try again..")
+    }
+  };
+
+  const changePlayer=()=>{
+    setIsguessTrue(false);
+    setDraw(!draw);
+    setWaitForDraw(!waitForDraw);
+    setWaitForGuess(false);
+    SocketService.emit("success",scores);
+  };
+
+  const endGame = () => {
+    console.log("finish the game");
+    SocketService.emit("endGame");
+  };
+
+  return (
+    <div className="gameScreen">
+        {isLoading && <WaitingView title="waiting for the other player"/>}
+        {!isLoading && (
+            <div className="gameScreen__header">
+                <div className="gameScreen__header-scores">
+                    scores : {scores}
+                </div>
+                <button className="gameScreen__header-btn" onClick={endGame}>end game</button>
+            </div>
+        )}
+        {draw && !isLoading && (
+        <DrawingView
+          onchooseWord={chooseWord}
+          onSend={sendDrawImg}
+          waiting={waitForGuess}
+        />
+      )}
+      {!draw && !isLoading && (
+        <GuessingView
+          waiting={waitForDraw}
+          drawingImg={drawingImg}
+          success={guessTrue}
+        />
+      )}
+      {isguessTrue && (
+        <div className="succes__popup">
+          <button
+            className="success__popup-close"
+            onClick={()=>{
+              changePlayer();
+            }}
+          >
+           <CloseIcon/>
+          </button>
+          <h3>Your guess is true 🎉</h3>
+          <h4>you earn {newScores} points</h4>
+        </div>
+      )}
+        
+    </div>
+  )
+}
+
+export default Game

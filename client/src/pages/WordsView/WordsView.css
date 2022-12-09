@@ -1,0 +1,41 @@
+.wordsView__title{
+text-align: center;
+width: 70%;
+margin: auto;
+line-height: 3rem;
+margin-bottom: 5rem;
+}
+
+.wordsView__btns{
+    margin:auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.wordsView__word-btn{
+    font-family: inherit;
+    font-size: 2.5rem;
+    padding:0.5rem 1.5rem;
+    border: none;
+    border-radius: 1.5rem;
+    cursor: pointer;
+    margin-bottom: 1rem;
+}
+
+.wordsView__word-btn:hover{
+    box-shadow: 0.5rem 0.5rem 0.5rem rgb(110, 108, 108);
+    transform: scale(1.05);
+}
+
+
+.wordsView__word-easy{
+    background-color:#3f87a6;
+}
+
+.wordsView__word-medium{
+    background-color:#b2b4b0;
+}
+
+.wordsView__word-large{
+    background-color:#f69d3c;
+}

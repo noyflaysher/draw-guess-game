@@ -1,0 +1,67 @@
+.gameScreen{
+    /* padding: 0.2rem; */
+    box-direction: 0.5rem solid black;
+    background-color: white;
+    height: 100%;
+    padding:1rem;
+}
+.gameScreen__header{
+    display: flex;
+    justify-content:space-between;
+    font-size: 2.5rem;
+    align-items: center;
+    margin-bottom: 5rem;
+}
+
+.gameScreen__header-scores{
+    font-weight: 500;
+}
+
+.gameScreen__header-btn{
+    font-size: 2rem;
+    padding: 0.2rem;
+    border:0.45rem solid #3f87a6;
+    border-radius: 2rem;
+    background-color: transparent;
+    font-family: inherit;
+}
+
+.gameScreen__header-btn:hover{
+    /* background-color:  #3f87a6; */
+    cursor: pointer;
+    transform: scaleX(1.1);
+    font-weight: 600;
+    box-shadow:0.5rem 0.5rem 0.5rem 0.3rem rgb(163, 158, 158) ;
+}
+
+.points{
+    display: flex;
+    justify-content: space-between;
+    font-size: 2.1rem;
+}
+
+.succes__popup{
+    text-align: center;
+    border: 0.5rem solid #3f87a6;
+    z-index: 10;
+    position: absolute;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    background-color: white;
+    box-shadow: 0.5rem 0.5rem 0.5rem 0.5rem rgb(93, 92, 92);
+    padding: 2rem;
+    font-size: 2rem;
+
+}
+
+.success__popup-close{
+    position: relative;
+    left:-7.3rem;
+    top:-1rem;
+    cursor: pointer;
+}
+
+.success__popup-close:hover{
+    box-shadow: 0.15rem 0.15rem 0.15rem 0.15rem rgb(126, 125, 125);
+}

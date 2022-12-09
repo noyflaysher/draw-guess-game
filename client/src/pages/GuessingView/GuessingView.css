@@ -1,0 +1,30 @@
+.guessingView{
+    margin: auto;
+    text-align: center;
+}
+
+.guessingView__guess{
+    width:55%;
+    margin-right: 2rem;
+    font-family: inherit;
+    padding: 0.5rem;
+    
+}
+
+.guessingView__btn{
+    border: 0.4rem solid #f69d3c;
+    padding: 0.5rem 1rem;
+    background-color: transparent;
+    border-radius: 2rem;
+    cursor: pointer;
+    margin-bottom: 2.5rem;
+    font-family: inherit;
+    margin-top: 2rem;
+}
+
+.guessingView__btn:hover{
+    transform: scaleX(1.1);
+    font-weight: 600;
+    box-shadow:0.5rem 0.5rem 0.5rem 0.3rem rgb(163, 158, 158) ;
+    background-color: #f69d3c;
+}
