@@ -6,6 +6,10 @@ const cors = require("cors");
 app.use(cors());
 const server = http.createServer(app);
 
+app.get('/', (req, res) => {
+  res.sendStatus(200)
+})
+
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:3000",
