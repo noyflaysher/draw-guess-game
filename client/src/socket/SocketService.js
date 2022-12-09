@@ -10,7 +10,7 @@ export const SocketService={
 
 function init(){
     console.log("init");
-    socket=io("https://draw-and-guess-server2.onrender.com");
+    socket=io("http://localhost:3002");
 }
 
 function terminate(){
