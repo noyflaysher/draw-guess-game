@@ -8,7 +8,7 @@ const server = http.createServer(app);
 
 app.get('/', (req, res) => {
   res.sendStatus(200)
-})
+});
 
 const io = new Server(server, {
   cors: {
