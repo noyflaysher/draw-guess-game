@@ -10,8 +10,6 @@ function DrawingView({onchooseWord,onSend,waiting}) {
   const [color,setColor]=useState("black");
 
   const canvasRef = useRef(null);
-  const canvas = canvasRef.current;
-
 
   const onChooseWord = (word, scores) => {
     console.log("on choose word");
@@ -55,7 +53,6 @@ function DrawingView({onchooseWord,onSend,waiting}) {
             <button className="yellow drawingView__canvas-brush-color" onClick={()=>setColor("#FFD700")}/>
             <button className="black drawingView__canvas-brush-color" onClick={()=>setColor("black")}/>
           </div>
-          
           <CanvasDraw
             brushColor={color}
             lazyRadius= {1}
@@ -63,8 +60,7 @@ function DrawingView({onchooseWord,onSend,waiting}) {
             canvasHeight={250}
             brushRadius={5}
             className='drwingView__canvas'
-           ref={canvasRef}/>
-          
+            ref={canvasRef}/>
         </div>
         </>
       )}

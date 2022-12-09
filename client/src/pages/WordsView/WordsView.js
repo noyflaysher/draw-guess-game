@@ -8,9 +8,9 @@ function WordsView({onChoose}) {
     var randomWords = require('random-words');
 
     useEffect(()=>{
-        const easyWord=randomWords({exactly:1, minLength: 2, maxLength: 3})[0];
+        const easyWord=randomWords({exactly:1, minLength: 3, maxLength: 4})[0];
         console.log(`easy ${easyWord}`);
-        const mediumWord=randomWords({exactly:1,minLength: 4, maxLength: 5 })[0];
+        const mediumWord=randomWords({exactly:1,minLength: 5, maxLength: 5 })[0];
         console.log(`madium ${mediumWord}`);
         const hardWord=randomWords({exactly:1, minLength: 6})[0];
         console.log(`hard ${hardWord}`);

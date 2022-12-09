@@ -11,8 +11,7 @@ import "./Game.css";
 function Game() {
   const navigate = useNavigate();
   const [scores, setScores] = useState(0);
-  const [newScores, setNewScores] = useState();
-  // const [waitForPlayer, setWaitForPlayer] = useState(true);
+  const [newScores, setNewScores] = useState(0);
   const [word, setWord] = useState(null);
   const [draw, setDraw] = useState(false);
   const [waitForDraw, setWaitForDraw] = useState(true);
@@ -23,14 +22,12 @@ function Game() {
 
   useEffect(() => {
     SocketService.on("waitForPlayer", () => {
-      console.log("waiting");
       setWaitForDraw(false);
       setWaitForGuess(false);
       setDraw(true);
     });
 
     SocketService.on("startGame", () => {
-      console.log("start");
       setIsLoading(false);
     });
 
@@ -40,19 +37,17 @@ function Game() {
       setDraw(false);
     });
 
-    SocketService.on("getWordChoosing", ({ word, scores }) => {
-      console.log(`get word choosing`);
+    SocketService.on("getChoosingWord", ({ word, scores }) => {
       setWord(word);
       setNewScores(scores);
     });
 
-    SocketService.on("getDrawing", (drawingImg) => {
-      console.log("get drawing");
-      setDrawingImg(drawingImg);
+    SocketService.on("getDraw", (drawingImg) => {
       setDraw(false);
+      setDrawingImg(drawingImg);
       setWaitForGuess(false);
-      setWaitForDraw(false);
       setIsLoading(false);
+      setWaitForDraw(false);
     });
 
     SocketService.on("winner", (winner) => {
@@ -63,28 +58,31 @@ function Game() {
         alert(`both are the winner 🏆 `);
       }
       else{
-        alert(`you are the winner 🏆 `);
+        alert(`${winner} is the winner 🏆 `);
       }      
-      localStorage.removeItem("players");
+      // localStorage.removeItem("players");
       SocketService.terminate()
       navigate("/");
     });
 
-    SocketService.on("loss", (loser) => {
+    SocketService.on("loss", () => {
       setDraw(true);
       setWaitForDraw(false);
       setIsLoading(true);
       alert(`you lost 😕 `);
-      localStorage.removeItem("players");
+      // localStorage.removeItem("players");
       SocketService.terminate()
       navigate("/");
     });
   }, []);
 
+  const chooseWord=(word,scores)=>{
+    SocketService.emit("sendChoosingWord",{ word, scores });
+  };
+
   const sendDrawImg=(drawingImg)=>{
     setWaitForGuess(true);
-    console.log("drawing send");
-    SocketService.emit("sentDrawing",drawingImg);
+    SocketService.emit("sendDraw",drawingImg);
   };
 
   const guessTrue=(guessWord)=>{
@@ -105,16 +103,10 @@ function Game() {
     SocketService.emit("success",scores);
   };
 
-  const chooseWord=(word,scores)=>{
-    console.log("send the word to server");
-    SocketService.emit("sentWordChoosing",{ word, scores });
-  };
-
   const endGame = () => {
     console.log("finish the game");
     SocketService.emit("endGame");
   };
-  
 
   return (
     <div className="gameScreen">
@@ -153,7 +145,6 @@ function Game() {
           </button>
           <h3>Your guess is true 🎉</h3>
           <h4>you earn {newScores} points</h4>
-          
         </div>
       )}
         

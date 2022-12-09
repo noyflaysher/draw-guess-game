@@ -3,9 +3,7 @@ const app = express();
 const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
-
 app.use(cors());
-
 const server = http.createServer(app);
 
 const io = new Server(server, {
@@ -15,20 +13,12 @@ const io = new Server(server, {
   },
 });
 
-const corsOptions = {
-  origin: "*",
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE"],
-};
-// app.use(cors(corsOptions));
-// app.use(express.static("public"));
-
-let scores=[0,0];
-let players=[];
 let sockets=[];
-let bool=true;
-let socket1;
-let socket2;
+let players=[];
+let scores=[0,0];
+let player=true;
+// let socket1;
+// let socket2;
 
 io.on("connection", (socket) => {
   sockets.push(socket);
@@ -37,30 +27,26 @@ io.on("connection", (socket) => {
     players.push(userName);
     if (players.length === 1) {
       socket.emit("waitForPlayer");
-      // console.log(`player 1, socket id : ${socket.id}`);
-      // socket1=socket.id;
     }
     if (players.length === 2) {
-      // console.log(`player 2, socket id : ${socket.id}`);
-      // socket2=socket.id;
       io.emit("startGame");
     }
     if (players.length > 2) {
       return;
     }
 
-    socket.on("sentDrawing", (drawingImg) => {
-      socket.broadcast.emit("getDrawing", drawingImg);
+    socket.on("sendChoosingWord", ({ word, scores }) => {
+      socket.broadcast.emit("getChoosingWord", { word, scores });
     });
 
-    socket.on("sentWordChoosing", ({ word, scores }) => {
-      socket.broadcast.emit("getWordChoosing", { word, scores });
+    socket.on("sendDraw", (drawingImg) => {
+      socket.broadcast.emit("getDraw", drawingImg);
     });
 
     socket.on("success", (points) => {
-      scores[Number(bool)] = points;
+      scores[Number(player)] = points;
       console.log(scores);
-      bool = !bool;
+      player = !player;
       socket.broadcast.emit("changeWaitForDraw");
     });
 
@@ -69,37 +55,33 @@ io.on("connection", (socket) => {
     });
 
     socket.on("endGame", () => {
-      var win = "";
-      console.log(scores);
-      if (scores[0] == scores[1]){
-        win = "both";
-        io.emit("winner", win);
-        
-      } 
-      else if (scores[0] > scores[1]){
-        // console.log(`score 0 : ${scores[0]}`);
-        // console.log(`score 1 : ${scores[1]}`);
-        // console.log("1 is the winner");
-        win = "player 1";
-        los="player2";
-        // io.to(socket1).emit("winner", socket1);
-        // io.to(socket2).emit("loss", socket2);
-        io.emit("winner", win);
-        
-      } 
-      else if (scores[0] < scores[1]) {
-        
-        // console.log(`score 0 : ${scores[0]}`);
-        // console.log(`score 1 : ${scores[1]}`);
-        // console.log("2 is the winner");
-        win = "player 2";
-        los="player1";
-        io.emit("winner", win);
-        // io.to(socket2).emit("winner", win);
-        // io.to(socket1).emit("loss", los);
-      }
+      let win = "";
+      if (scores[0] == scores[1]) win = "both";
+      if (scores[0] > scores[1]) win = "player 1";
+      if (scores[0] < scores[1]) win = "player 2";
+      io.emit("winner", win);
       sockets.forEach((s) => s.disconnect());
     });
+
+    // socket.on("endGame", () => {
+    //   let win = "";
+    //   if (scores[0] == scores[1]){
+    //     win = "both";
+    //     io.emit("winner", win);
+    //   } 
+    //   if (scores[0] > scores[1]){
+    //     win = "player 1";
+    //     io.to(socket1).emit("winner",win);
+    //     io.to(socket2).emit("loss");
+    //   } 
+    //   if (scores[0] < scores[1]){
+    //     win = "player 2";
+    //     io.to(socket2).emit("winner",win);
+    //     io.to(socket1).emit("loss");
+    //   } 
+      
+    //   sockets.forEach((s) => s.disconnect());
+    // });
   });
 });
 
