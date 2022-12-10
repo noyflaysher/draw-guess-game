@@ -1,5 +1,6 @@
 import io from "socket.io-client";
 let socket=null;
+const url=encodeURI("https://draw-and-back-server.herokuapp.com/");
 
 export const SocketService={
     init,
@@ -9,7 +10,7 @@ export const SocketService={
 };
 
 function init(){
-    socket=io("https://warm-cliffs-51873.herokuapp.com/");
+    socket=io(url);
 }
 
 function terminate(){
