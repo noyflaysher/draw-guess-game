@@ -9,7 +9,7 @@ export const SocketService={
 };
 
 function init(){
-    socket=io("http://localhost:3002");
+    socket=io("https://warm-cliffs-51873.herokuapp.com/");
 }
 
 function terminate(){
