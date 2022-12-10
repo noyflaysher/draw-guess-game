@@ -6,7 +6,6 @@ const cors = require("cors");
 const port = process.env.PORT || 3002;
 app.use(cors());
 const server = http.createServer(app);
-// app.use(express.static("public"));
 
 const io = new Server(server, {
   cors: {
@@ -70,4 +69,4 @@ io.on("connection", (socket) => {
 
 server.listen(port,()=>{
     console.log("SERVER IS RUNNING");
-})
+});
