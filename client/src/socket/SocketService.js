@@ -1,6 +1,6 @@
 import io from "socket.io-client";
 let socket=null;
-const url=encodeURI("https://draw-and-back-server.herokuapp.com/");
+const url="http://localhost:3002";
 
 export const SocketService={
     init,
