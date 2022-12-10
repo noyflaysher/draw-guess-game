@@ -4,7 +4,7 @@
 <p>Each player in turn receives a word according to the difficulty he chose and draws it, the other player sees the drawing and is required to guess the word, and so on</p>
 
 <h2>To run the app, please enter the following commands in this order:</h2>
-<h3><ul>Server:</ul> </h3>
+<h3>Server: </h3>
 1. cd server
 2. npm start
 
