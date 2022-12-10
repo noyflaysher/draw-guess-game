@@ -5,21 +5,27 @@
 
 <h2>To run the app, please enter the following commands in this order:</h2>
 <h3>Server: </h3>
-1. cd server
-2. npm start
+<ul>
+  <li>1. cd server</li>
+  <li>2. npm start</li>
+</ul>
 
 <h3>Client: </h3>
-1. cd client
-2. npm start
+<ul>
+  <li>1. cd client</li>
+  <li>2. npm start</li>
+</ul>
 
 <h2>Video :</h2>
 
 [draw and guess video.webm](https://user-images.githubusercontent.com/94534918/206864582-c14fcaec-ba94-48a9-b508-5010a665b2b8.webm)
 
 <h2>Technologics :</h2>
-1.HTML
-2.CSS
-3.REACT
-4.NODE JS
-5.EXPRESS
-6.SOCKET IO
+<ul>
+  <li>1.HTML</li>
+  <li>2.CSS</li>
+  <li>3.REACT</li>
+  <li>4.NODE JS</li>
+  <li>5.EXPRESS</li>
+  <li>6.SOCKET IO</li>
+ </ul>
