@@ -5,12 +5,12 @@ import "./GuessingView.css"
 
 function GuessingView({waiting,drawingImg,success}) {
   const canvasRef = useRef(null);
-  var canvasObject = canvasRef.current;
+  let canvas;
   const wordRef=useRef("");
 
   useEffect(() => {
-    canvasObject = canvasRef.current;
-    if (canvasObject && drawingImg) canvasObject.loadSaveData(drawingImg);
+    canvas = canvasRef.current;
+    if (canvas && drawingImg) canvas.loadSaveData(drawingImg);
   }, [waiting]);
 
   const sendGuess=()=>{
@@ -20,8 +20,8 @@ function GuessingView({waiting,drawingImg,success}) {
 
   return (
     <div className='guessingView'>
-      {waiting && <WaitingView title="waiting for draw"/>}
-      {!waiting && (
+      {waiting ? <WaitingView title="waiting for draw"/> :
+      (
         <div className="guessingView__container">
           <h1>Guess what is the word</h1>
           <CanvasDraw

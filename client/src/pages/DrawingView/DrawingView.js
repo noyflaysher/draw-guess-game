@@ -12,10 +12,8 @@ function DrawingView({onchooseWord,onSend,waiting}) {
   const canvasRef = useRef(null);
 
   const onChooseWord = (word, scores) => {
-    console.log("on choose word");
     setWordChoosing(word);
     onchooseWord(word, scores);
-    
   };
 
   const erase=()=>{

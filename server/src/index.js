@@ -6,10 +6,6 @@ const cors = require("cors");
 app.use(cors());
 const server = http.createServer(app);
 
-app.get('/', (req, res) => {
-  res.sendStatus(200)
-});
-
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:3000",
@@ -21,12 +17,9 @@ let sockets=[];
 let players=[];
 let scores=[0,0];
 let player=true;
-// let socket1;
-// let socket2;
 
 io.on("connection", (socket) => {
   sockets.push(socket);
-
   socket.on("userLogIn", (userName) => {
     players.push(userName);
     if (players.length === 1) {
@@ -49,46 +42,29 @@ io.on("connection", (socket) => {
 
     socket.on("success", (points) => {
       scores[Number(player)] = points;
-      console.log(scores);
       player = !player;
       socket.broadcast.emit("changeWaitForDraw");
     });
 
     socket.on("disconnect", () => {
       players = [];
+      sockets=[];
     });
 
     socket.on("endGame", () => {
       let win = "";
-      if (scores[0] == scores[1]) win = "both";
-      if (scores[0] > scores[1]) win = "player 1";
-      if (scores[0] < scores[1]) win = "player 2";
+      if (scores[0] === scores[1]) win = "both";
+      if (scores[0] > scores[1]) win =players[0];
+      if (scores[0] < scores[1]) win =players[1];
+      scores[0]=0;
+      scores[1]=0;
       io.emit("winner", win);
       sockets.forEach((s) => s.disconnect());
     });
 
-    // socket.on("endGame", () => {
-    //   let win = "";
-    //   if (scores[0] == scores[1]){
-    //     win = "both";
-    //     io.emit("winner", win);
-    //   } 
-    //   if (scores[0] > scores[1]){
-    //     win = "player 1";
-    //     io.to(socket1).emit("winner",win);
-    //     io.to(socket2).emit("loss");
-    //   } 
-    //   if (scores[0] < scores[1]){
-    //     win = "player 2";
-    //     io.to(socket2).emit("winner",win);
-    //     io.to(socket1).emit("loss");
-    //   } 
-      
-    //   sockets.forEach((s) => s.disconnect());
-    // });
+
   });
 });
-
 
 server.listen(3002,()=>{
     console.log("SERVER IS RUNNING");

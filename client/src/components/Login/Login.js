@@ -1,28 +1,24 @@
-import React, { useRef, useState } from 'react';
-import "./Login.css";
+import React, { useRef } from 'react';
 import { useNavigate } from "react-router-dom";
 import { SocketService } from '../../socket/SocketService';
+import "./Login.css";
 
 function Login() {
     const navigate=useNavigate();
     const playerName=useRef({ value: "" });
-    // localStorage.removeItem("players");
 
     const loginHandler=()=>{
         let name=playerName.current.value;
         if(name){
-            const players=JSON.parse(localStorage.getItem("players"))||[];
+            const players=[];
             players.push({name});
             SocketService.init();
             SocketService.emit("userLogIn",name);
-            // localStorage.setItem("players",JSON.stringify(players));
             navigate("/game");
         }else{
             alert("Please enter your name");
         }
     }
-
-    
 
   return (
     <div className='login'>

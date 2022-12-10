@@ -1,5 +1,4 @@
 import React from 'react';
-import Spinner from 'react-bootstrap/Spinner';
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import "./WaitingView.css"
 

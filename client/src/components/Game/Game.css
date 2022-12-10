@@ -1,5 +1,4 @@
 .gameScreen{
-    /* padding: 0.2rem; */
     box-direction: 0.5rem solid black;
     background-color: white;
     height: 100%;
@@ -27,7 +26,6 @@
 }
 
 .gameScreen__header-btn:hover{
-    /* background-color:  #3f87a6; */
     cursor: pointer;
     transform: scaleX(1.1);
     font-weight: 600;
@@ -56,12 +54,14 @@
 }
 
 .success__popup-close{
-    position: relative;
-    left:-7.3rem;
-    top:-1rem;
+    transform: translate(-6rem,-1rem);
     cursor: pointer;
 }
 
 .success__popup-close:hover{
     box-shadow: 0.15rem 0.15rem 0.15rem 0.15rem rgb(126, 125, 125);
+}
+
+h3,h4{
+    font-family:monospace;
 }

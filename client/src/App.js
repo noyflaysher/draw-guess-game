@@ -1,4 +1,3 @@
-
 import './App.css';
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import Welcome from './pages/Welcome/Welcome';
@@ -17,22 +16,6 @@ function App() {
           <Route
             path="/game"
             element={<Game/>}
-          />
-          <Route
-            path="/wait"
-            element=""
-          />
-          <Route
-            path="/choose"
-            element=""
-          />
-           <Route
-            path="/draw"
-            element=""
-          />
-             <Route
-            path="/guess"
-            element=""
           />
       </Routes>
     </Router>

@@ -1,5 +1,4 @@
 import React from 'react';
-import BrushIcon from '@mui/icons-material/Brush';
 import "./Welcome.css";
 import Login from '../../components/Login/Login';
 

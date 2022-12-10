@@ -4,11 +4,10 @@
 }
 
 .guessingView__guess{
-    width:55%;
+    width:70%;
     margin-right: 2rem;
     font-family: inherit;
     padding: 0.5rem;
-    
 }
 
 .guessingView__btn{
