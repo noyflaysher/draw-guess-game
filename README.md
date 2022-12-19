@@ -1,6 +1,7 @@
 # draw-guess-game
 
 <h2>This app is a Draw & Guess Game.</h2>
+url: https://draw-and-back-server.herokuapp.com/
 <p>Each player in his turn receives a word according to the difficulty he chose and draws it, the other player sees the drawing and is required to guess the word, and so on..</p>
 
 <h2>To run the app, please enter the following commands in this order:</h2>
