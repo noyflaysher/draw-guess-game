@@ -8,11 +8,7 @@ function App() {
     <div className="App">
        <Router>
         <Routes>
-          <Route path="/" element={<Navigate replace to="/welcome" />} />
-          <Route
-            path="/welcome"
-            element={<Welcome/>}
-          />
+          <Route path="/" element={<Welcome/>} />
           <Route
             path="/game"
             element={<Game/>}

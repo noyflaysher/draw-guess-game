@@ -14,10 +14,10 @@ const io = new Server(server, {
   },
 });
 
-let sockets=[];
-let players=[];
-let scores=[0,0];
-let player=true;
+let sockets = [];
+let players = [];
+let scores = [0, 0];
+let player = true;
 
 io.on("connection", (socket) => {
   sockets.push(socket);
@@ -27,7 +27,7 @@ io.on("connection", (socket) => {
       socket.emit("waitForPlayer");
     }
     if (players.length === 2) {
-      io.emit("startGame");
+      socket.emit("startGame");
     }
     if (players.length > 2) {
       return;
@@ -44,29 +44,26 @@ io.on("connection", (socket) => {
     socket.on("success", (points) => {
       scores[Number(player)] = points;
       player = !player;
-      socket.broadcast.emit("changeWaitForDraw");
     });
 
     socket.on("disconnect", () => {
       players = [];
-      sockets=[];
+      sockets = [];
     });
 
     socket.on("endGame", () => {
       let win = "";
       if (scores[0] === scores[1]) win = "both";
-      if (scores[0] > scores[1]) win =players[0];
-      if (scores[0] < scores[1]) win =players[1];
-      scores[0]=0;
-      scores[1]=0;
-      io.emit("winner", win);
+      if (scores[0] > scores[1]) win = players[0];
+      if (scores[0] < scores[1]) win = players[1];
+      scores[0] = 0;
+      scores[1] = 0;
+      socket.emit("winner", win);
       sockets.forEach((s) => s.disconnect());
     });
-
-
   });
 });
 
-server.listen(port,()=>{
-    console.log("SERVER IS RUNNING");
+server.listen(port, () => {
+  console.log("SERVER IS RUNNING");
 });

@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { SocketService } from '../../socket/SocketService';
+import { SocketService } from "../../socket/SocketService";
 import DrawingView from "../../pages/DrawingView/DrawingView";
 import GuessingView from "../../pages/GuessingView/GuessingView";
 import WaitingView from "../../pages//WaitingView/WaitingView";
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
 import "./Game.css";
-
 
 function Game() {
   const navigate = useNavigate();
@@ -22,24 +21,24 @@ function Game() {
   const [drawingImg, setDrawingImg] = useState(null);
   const [isguessTrue, setIsguessTrue] = useState(false);
   const [winner, setWinner] = useState("");
-  const [open,setOpen]=useState(false);
+  const [open, setOpen] = useState(false);
 
   const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -150%)',
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -150%)",
     width: 220,
-    height:120,
-    bgcolor: 'background.paper',
-    border: '3px solid #000',
+    height: 120,
+    bgcolor: "background.paper",
+    border: "3px solid #000",
     boxShadow: 24,
     p: 4,
-    fontSize:'large',
-    fontSize:'30px',
-    fontFamily:'monospace',
+    fontSize: "large",
+    fontSize: "30px",
+    fontFamily: "monospace",
   };
-  
+
   useEffect(() => {
     SocketService.on("waitForPlayer", () => {
       setWaitForDraw(false);
@@ -49,12 +48,6 @@ function Game() {
 
     SocketService.on("startGame", () => {
       setIsLoading(false);
-    });
-
-    SocketService.on("changeWaitForDraw", () => {
-      setWaitForDraw(true);
-      setWaitForGuess(false);
-      setDraw(false);
     });
 
     SocketService.on("getChoosingWord", ({ word, scores }) => {
@@ -71,50 +64,47 @@ function Game() {
     });
 
     SocketService.on("winner", (winner) => {
-      if(winner=="both"){
+      if (winner == "both") {
         setWinner("both are");
-      }
-      else{
+      } else {
         setWinner(`${winner} is`);
-      } 
-      setOpen(true);     
+      }
+      setOpen(true);
     });
-
-
   }, []);
 
-  const chooseWord=(word,scores)=>{
-    SocketService.emit("sendChoosingWord",{ word, scores });
+  const chooseWord = (word, scores) => {
+    SocketService.emit("sendChoosingWord", { word, scores });
   };
 
-  const restartGame=()=>{
+  const restartGame = () => {
     setDraw(true);
     setWaitForDraw(false);
     setIsLoading(true);
-    SocketService.terminate()
+    SocketService.terminate();
     navigate("/");
-  }
-
-  const sendDrawImg=(drawingImg)=>{
-    setWaitForGuess(true);
-    SocketService.emit("sendDraw",drawingImg);
   };
 
-  const guessTrue=(guessWord)=>{
+  const sendDrawImg = (drawingImg) => {
+    setWaitForGuess(true);
+    SocketService.emit("sendDraw", drawingImg);
+  };
+
+  const guessTrue = (guessWord) => {
     if (guessWord.value == word) {
-        setIsguessTrue(true);
-        setScores(scores+newScores);
-    }else{
-        alert("try again..")
+      setIsguessTrue(true);
+      setScores(scores + newScores);
+    } else {
+      alert("try again..");
     }
   };
 
-  const changePlayer=()=>{
+  const changePlayer = () => {
     setIsguessTrue(false);
     setDraw(!draw);
     setWaitForDraw(!waitForDraw);
     setWaitForGuess(false);
-    SocketService.emit("success",scores);
+    SocketService.emit("success", scores);
   };
 
   const endGame = () => {
@@ -124,61 +114,62 @@ function Game() {
 
   return (
     <div className="gameScreen">
-        {isLoading ? <WaitingView title="waiting for the other player"/> :
-        (
-            <div className="gameScreen__header">
-                <div className="gameScreen__header-scores">
-                    scores : {scores}
-                </div>
-                <button className="gameScreen__header-btn" onClick={endGame}>end game</button>
-            </div>
-        )
-        }
-        {draw && !isLoading && (
-        <DrawingView
-          onchooseWord={chooseWord}
-          onSend={sendDrawImg}
-          waiting={waitForGuess}
-        />
+      {isLoading ? (
+        <WaitingView title="waiting for the other player" />
+      ) : (
+        <div className="gameScreen__header">
+          <div className="gameScreen__header-scores">scores : {scores}</div>
+          <button className="gameScreen__header-btn" onClick={endGame}>
+            end game
+          </button>
+        </div>
       )}
-      {!draw && !isLoading && (
-        <GuessingView
-          waiting={waitForDraw}
-          drawingImg={drawingImg}
-          success={guessTrue}
-        />
-      )}
+      {draw &&
+        !isLoading && ( //first
+          <DrawingView
+            onchooseWord={chooseWord}
+            onSend={sendDrawImg}
+            waiting={waitForGuess}
+          />
+        )}
+      {!draw &&
+        !isLoading && ( //second when he need to guess
+          <GuessingView
+            waiting={waitForDraw}
+            drawingImg={drawingImg}
+            success={guessTrue}
+          />
+        )}
 
       <Modal
         open={isguessTrue}
-        onClose={()=>changePlayer()}
+        onClose={() => changePlayer()}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h4" component="h4">
-              <h3>Your guess is true 🎉</h3>
+            <h3>Your guess is true 🎉</h3>
           </Typography>
           <Typography id="modal-modal-description" variant="h4" sx={{ mt: 2 }}>
-          <h4>you earn {newScores} points</h4>
+            <h4>you earn {newScores} points</h4>
           </Typography>
         </Box>
       </Modal>
       <Modal
         open={open}
-        onClose={()=>restartGame()}
+        onClose={() => restartGame()}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h3" component="h3">
-              <h3>{winner} the winner 🏆</h3>
-                
+            <h3>{winner} the winner 🏆</h3>
           </Typography>
         </Box>
       </Modal>
     </div>
-  )
+  );
 }
 
-export default Game
+export default Game;
